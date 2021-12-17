@@ -1,5 +1,5 @@
 from wallet import Wallet
-from template import *
+from block import *
 
 yeetcoin = Blockchain()
 Alice = Wallet("Alice")

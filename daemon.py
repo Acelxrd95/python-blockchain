@@ -25,7 +25,7 @@ class Daemon:
         with open("yeetcoin.json", "r") as f:
             data = loads(f.read())
         if data:
-            blockchain = Blockchain(data['chain'])
+            blockchain = Blockchain(data)
         else:
             self.logger.info('Blockchain not found, creating new one')
             blockchain = Blockchain()
@@ -37,7 +37,7 @@ class Daemon:
         with open("yeetcoin.json", "w") as f:
             data = {}
             for height, block in self.blockchain.chain.items():
-                data.update({height: block.to_dict()})
+                data.update({height: block.serialize()})
             f.write(dumps(data, sort_keys=True))
         self.logger.info('Blockchain saved')
 

@@ -38,6 +38,9 @@ class Wallet:
             self.password_hash = sha256("demo123".encode()).hexdigest()
         print("Wallet address loaded")
         self.is_running = True
+        print("Calculating total balance")
+        self.balance()
+        print("Total balance: {}".format(self.total_balance))
 
     def stop(self):
         print("Saving wallet addresses")
@@ -46,7 +49,7 @@ class Wallet:
                 "private_key": self.private_key.to_string().hex(),
                 "password": self.password_hash,
             }
-            f.write(dumps(data, sort_keys=True))
+            f.write(dumps(data))
         print("Wallet saved")
         self.is_running = False
 
@@ -58,6 +61,7 @@ class Wallet:
         if not self.is_running:
             print("Wallet is not running")
             return
+        self.total_balance = 0
         for height, block in self.blockchain.chain.items():
             for trans in block.transactions:
                 for inpt in trans.inputs:
@@ -68,7 +72,6 @@ class Wallet:
                     if self.public_key.to_string().hex() == outp.address:
                         self.total_balance += outp.value
                         self.prev_in_transactions.append((height, trans.hash))
-                self.total_balance += self.total_balance
 
     def send(self, amount, recipient_public_key, fee=0):
         """
@@ -81,7 +84,8 @@ class Wallet:
         if not self.is_running:
             print("Wallet is not running")
             return
-        if self.balance() >= amount:
+        self.balance()
+        if self.total_balance >= amount:
             transactions = []
             amnt_from_trans = 0
             outputs = []
@@ -91,17 +95,19 @@ class Wallet:
                     transactions.append(transaction)
                     # amnt_from_trans += transaction.get_adr_output(adr.public_key.to_string().hex())
                     outputs.append(transaction.get_adr_output(self.public_key.to_string().hex()))
+                    amnt_from_trans += outputs[-1].value
                     if amnt_from_trans >= amount:
                         inputs = [TransItem(output.address, output.value, trans) for output in outputs]
                         if amnt_from_trans == amount:
-                            outputs = [TransItem(recipient_public_key, None, amount)]
+                            outputs = [TransItem(recipient_public_key, amount, None)]
                         else:
                             outputs = [
-                                TransItem(recipient_public_key, None, amount),
-                                TransItem(self.public_key.to_string().hex(), None, (amnt_from_trans - amount)),
+                                TransItem(recipient_public_key, amount, None),
+                                TransItem(self.public_key.to_string().hex(), (amnt_from_trans - amount), None),
                             ]
                         t = Transaction(inputs, outputs, fee)
                         t.sign_transaction(self.private_key)
                         self.blockchain.add_transaction(t)
+                        return
         else:
             print("Not enough money to send")

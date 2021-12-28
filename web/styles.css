@@ -1,0 +1,10 @@
+. {
+    font-family: sans-serif;
+}
+
+.dashboard-card {
+    width: calc((100% / 3) - 15px);
+}
+.recent-transactions {
+    /*height: calc(100% - 50px);*/
+}

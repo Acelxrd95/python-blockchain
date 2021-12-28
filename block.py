@@ -1,7 +1,6 @@
 from hashlib import sha256
 from json import dumps
-
-import inputs as inputs
+import datetime
 
 from transaction import Transaction, TransItem
 
@@ -54,9 +53,10 @@ class Blockchain:
         the user adds them
         :return:
         """
+        # TODO: add mining logic here
         self.create_block()
 
-    def get_transaction(self, transaction_hash, block_id):
+    def get_transaction(self, block_id, transaction_hash):
         block = self.chain[block_id]
         for transaction in block.transactions:
             if transaction.hash == transaction_hash:
@@ -75,48 +75,44 @@ class Blockchain:
         self.ether.append(transaction)
 
     def create_block(self):
-        block = Block(self.height + 1, self.ether, self.chain[-1].hash)
+        block = Block(self.ether, list(self.chain.values())[-1].hash)
         self.ether = []
         self.chain.update({block.height: block})
 
     def create_genesis_block(self):
-        inpt = TransItem("0", 10, "0")
+        inpt = TransItem("0", 10, None)
         outpt = TransItem(
-            "55125ef59d79ad15db027b35c0b6644ef68c022fc58153176695e64632daf0eb7a9f1d666df202f2da7facbaea21cdd8", 10, "0"
+            "6091dd2b91c627b042ccb3e3e4a28c2fdc4daf51b6aee1cdf671983b431604af0bf9102bdcda7e952e4fa9e583df072b", 10, "0"
         )
         transact = Transaction([inpt], [outpt], 0)
-        block = Block(0, [transact], "0")
-        self.chain.update({block.height: block})
+        block = Block([transact], "0")
+        self.chain.update({self.height: block})
 
 
 class Block:
-    def __init__(self, height=None, transactions=None, previous_hash=None, data=None):
+    def __init__(self, transactions=None, previous_hash=None, data=None):
         if data is None:
-            if height is None or transactions is None or previous_hash is None:
-                raise ValueError("height, transactions and previous_hash are required")
+            if transactions is None or previous_hash is None:
+                raise ValueError("transactions and previous_hash are required")
             self.previous_hash = previous_hash
             self.transactions = transactions
-            self.height = height
-            self.timestamp = 0
-            self.proof = 0
-            self.difficulty = 0
-            self.confirmations = 0
-            self.size = 0
-            self.block_reward = 0
+            self.timestamp = datetime.datetime.now()
+            self.difficulty = 0  # TODO: calculate difficulty
+            self.size = None  # TODO: calculate size
             self.fee_reward = 0
-            self.miner = 0
-            self.hash = 0
+            for trans in self.transactions:
+                self.fee_reward += trans.fee
+            self.block_reward = 0  # TODO: Calculate block reward
+            self.miner = None  # TODO: figure out the miner
+            self.hash = None
         else:
             self.load_block(data)
 
     def load_block(self, data):
         self.previous_hash = data["previous_hash"]
         self.transactions = [Transaction(data=transaction) for transaction in data["transactions"]]
-        self.height = data["height"]
-        self.timestamp = data["timestamp"]
-        self.proof = data["proof"]
+        self.timestamp = datetime.datetime.fromtimestamp(data["timestamp"])
         self.difficulty = data["difficulty"]
-        self.confirmations = data["confirmations"]
         self.size = data["size"]
         self.block_reward = data["block_reward"]
         self.fee_reward = data["fee_reward"]
@@ -127,13 +123,10 @@ class Block:
         serialized_transactions = [transaction.serialize() for transaction in self.transactions]
         block_string = dumps(
             {
-                "height": self.height,
-                "timestamp": self.timestamp,
-                "proof": self.proof,
+                "timestamp": self.timestamp.timestamp(),
                 "previous_hash": self.previous_hash,
                 "transactions": serialized_transactions,
                 "difficulty": self.difficulty,
-                "confirmations": self.confirmations,
                 "size": self.size,
                 "block_reward": self.block_reward,
                 "fee_reward": self.fee_reward,
@@ -146,16 +139,13 @@ class Block:
     def serialize(self):
         serialized_transactions = [transaction.serialize() for transaction in self.transactions]
         return {
-            "height": self.height,
-            "timestamp": self.timestamp,
-            "proof": self.proof,
+            "timestamp": self.timestamp.timestamp(),
             "previous_hash": self.previous_hash,
-            "transactions": serialized_transactions,
             "difficulty": self.difficulty,
-            "confirmations": self.confirmations,
             "size": self.size,
             "block_reward": self.block_reward,
             "fee_reward": self.fee_reward,
             "miner": self.miner,
             "hash": self.hash,
+            "transactions": serialized_transactions,
         }

@@ -4,10 +4,10 @@ from json import dumps
 
 
 class TransItem:
-    def __init__(self, address, trans_reference, value):
+    def __init__(self, address, value, trans_reference=None):
         self.address = address
-        self.trans_reference = trans_reference
         self.value = value
+        self.trans_reference = trans_reference
 
     def serialize(self):
         if self.trans_reference is None:

@@ -1,21 +1,9 @@
 import socket
 from logging import getLogger, StreamHandler, Formatter, INFO
 from json import loads, dumps
+from peer import Peer
 
-
-def check_alive(host, port):
-    """
-    Check if a host is alive.
-    """
-    sckt = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    try:
-        sckt.connect((host, port))
-        sckt.send(b"testalive")
-        sckt.shutdown(2)
-        return True
-    except:
-        return False
-
+check_alive = Peer.check_alive
 
 # create logger
 logger = getLogger(__name__)
@@ -24,7 +12,7 @@ handler.setLevel(INFO)
 handler.setFormatter(Formatter("%(asctime)s %(levelname)s %(message)s"))
 logger.setLevel(INFO)
 logger.addHandler(handler)
-# client dictionary
+# client list
 clients = []
 # define connection info
 HOST = socket.gethostbyname(socket.gethostname())

@@ -1,9 +1,17 @@
-# add a logger for config file
-from logging import getLogger, StreamHandler, Formatter, INFO
+from logging import getLogger, StreamHandler, Formatter, INFO, DEBUG
+
+
+def set_logger(level=INFO):
+    """
+    Set logger.
+    """
+    handler.setLevel(level)
+    handler.setFormatter(Formatter("%(asctime)s %(levelname)s %(message)s"))
+    logger.addHandler(handler)
+    logger.setLevel(level)
+    logger.info("Logger set.")
+
 
 logger = getLogger(__name__)
 handler = StreamHandler()
-handler.setLevel(INFO)
-handler.setFormatter(Formatter("%(asctime)s %(levelname)s %(message)s"))
-logger.setLevel(INFO)
-logger.addHandler(handler)
+set_logger(DEBUG)

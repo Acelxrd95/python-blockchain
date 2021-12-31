@@ -1,27 +1,63 @@
 import socket
-import threading
-from json import loads, dumps
 from concurrent.futures import ThreadPoolExecutor
+from dataclasses import dataclass
+from json import loads, dumps
+from typing import Any, Optional
+
+
+@dataclass
+class Protocol:
+    type: str
+    data: Any
+
+    def __str__(self):
+        return dumps(self.__dict__)
+
+    def __bytes__(self):
+        return dumps(self.__dict__).encode()
+
+    @staticmethod
+    def from_str(s):
+        return Protocol(**loads(s))
+
+    @staticmethod
+    def from_bytes(b):
+        return Protocol.from_str(b.decode())
+
+
+preset_protocols = {
+    "ping": Protocol(type="ping", data=None),
+    "pong": Protocol(type="pong", data=None),
+    "message": Protocol(type="message", data=None),
+    "get_chain": Protocol(type="get_chain", data=None),
+    "chain": Protocol(type="chain", data=None),
+    "get_peers": Protocol(type="get_peers", data=None),
+}
 
 
 class Peer:
-    def __init__(self):
-        self.HOST = socket.gethostbyname(socket.gethostname())
-        self.PORT = 5000
-        self.BUFFER_SIZE = 1024
-        self.threads = []
-        self.peer_threads = []
-        self.node = None
-        self.peers = []
-
-    def start(self):
-        with ThreadPoolExecutor as executor:
-            self.threads.append(executor.submit(self.start_server))
-            self.threads.append(executor.submit(self.get_alive_peers))
-
-    def start_server(self):
+    def __init__(self, port: int = 5000, buffer_size: int = 1024) -> None:
+        self.host: str = socket.gethostbyname(socket.gethostname())
+        self.port: int = port
+        self.buffer_size: int = buffer_size
+        self.threads: ThreadPoolExecutor = ThreadPoolExecutor(max_workers=10)
+        self.peers: list[tuple[str, int]] = []
         self.node = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.node.bind((self.HOST, self.PORT))
+
+    def start(self) -> None:
+        with self.threads as executor:
+            executor.submit(self.listen)
+            executor.submit(self.get_alive)
+
+    def listen(self) -> None:
+        """
+        Listen for incoming connections
+
+        TODO
+        ----
+        - Manage protocols sent by other peers
+        """
+        self.node.bind((self.host, self.port))
         self.node.listen()
         self.node.settimeout(30)
         while True:
@@ -32,12 +68,13 @@ class Peer:
             print("Connected by", addr)
             data = conn.recv(1024)
             # if first part of data is 'testalive'
-            if data.decode("utf-8") == "testalive":
-                print("Received testalive from", addr)
+            if Protocol.from_bytes(data).type == preset_protocols["ping"].type:
+                print("Received print from", addr)
+                conn.send(bytes(preset_protocols["pong"]))
             else:
-                print(data.decode("utf-8"))
+                pass
 
-    def get_alive_peers(self):
+    def get_alive(self) -> None:
         # Create a TCP/IP socket
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         # connect to tracker server
@@ -45,45 +82,99 @@ class Peer:
         # receive peer data from tracker server
         data = sock.recv(1024)
         # send self server data to tracker server
-        sock.send(dumps((self.HOST, self.PORT)).encode())
+        sock.send(dumps((self.host, self.port)).encode())
         # close socket
         sock.close()
         self.peers = loads(data.decode())
 
-    def broadcast(self):
+    def broadcast(self, message: Protocol) -> None:
+        """
+        Broadcast a message to all peers
+
+        Parameters
+        ----------
+        message : str
+            Message to broadcast
+        """
         for peer in self.peers:
             if self.check_alive(peer[0], peer[1]):
                 # connect to a peer on a new thread
-                self.peer_threads.append(threading.Thread(target=self.sendmsg, args=(peer[0], peer[1])))
-                self.peer_threads[-1].start()
+                with self.threads as executor:
+                    pass
         for peer in self.peer_threads:
             peer.join()
 
-    def sendmsg(host, port):
+    @staticmethod
+    def check_alive(host: str, port: int) -> bool:
+        """
+        Check if a node is alive.
+
+        Parameters
+        ----------
+        host : str
+            Hostname of the node
+        port : int
+            Port of the node
+
+        Returns
+        -------
+        bool
+            True if node is alive, False otherwise
+        """
         # Create a TCP/IP socket
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        # connect to peer server
-        sock.connect((host, port))
-        sock.send(b"hello")
-        # # receive peer data from peer server
-        # data = sock.recv(1024)
-        # # send self server data to peer server
-        # sock.send(dumps((HOST, PORT)).encode())
-        # print peer data
-        # print(data.decode())
+        # connect to peer
+        try:
+            sock.connect((host, port))
+        except ConnectionRefusedError:
+            return False
+        # send testalive message
+        sock.send(bytes(preset_protocols["ping"]))
+        # receive response
+        data = sock.recv(1024)
         # close socket
         sock.close()
+        # if response is 'alive' return True else False
+        return data.decode("utf-8") == "alive"
 
-    @staticmethod
-    def check_alive(host, port):
+    def get_latest_chain(self) -> None:
         """
-        Check if a host is alive.
+        Get the latest chain from all peers
+
+        Returns
+        -------
+        list
+            List of blocks
         """
-        sckt = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        try:
-            sckt.connect((host, port))
-            sckt.send(b"testalive")
-            sckt.shutdown(2)
-            return True
-        except:
-            return False
+        for peer in self.peers:
+            if self.check_alive(peer[0], peer[1]):
+                pass
+            pass
+
+    def get_chain(self, host: str, port: int) -> Optional[list]:
+        """
+        Get the latest chain from a peer
+
+        Parameters
+        ----------
+        host : str
+            Hostname of the peer
+        port : int
+            Port of the peer
+
+        Returns
+        -------
+        list
+            List of blocks
+        """
+        # connect to peer
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+            sock.connect((host, port))
+            # send getchain protocol
+            prtcl = preset_protocols["get_chain"]
+            sock.send(bytes(prtcl))
+            # receive chain
+            data = Protocol.from_bytes(sock.recv(1024))
+        if data.type == "chain":
+            return data.data
+        return None

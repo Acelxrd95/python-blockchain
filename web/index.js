@@ -95,12 +95,11 @@ function refresh_chain() {
 }
 
 function minefunc(bool) {
-    eel.mine(bool,stake.value)(function (data) {
+    eel.mine(bool)(function (data) {
         console.log(data)
         logger(data)
     });
 }
-let stake = document.getElementById("stake");
 let minestart = document.getElementById("start_mining");
 let minestop = document.getElementById("stop_mining")
 
@@ -109,11 +108,9 @@ eel.expose(enable_mining_button, "enable_mining_button")
 function enable_mining_button(bool) {
     if (bool) {
         minestart.classList.add("disabled");
-        stake.classList.add("disabled");
         minestop.classList.remove("disabled");
     } else {
         minestart.classList.remove("disabled");
-        stake.classList.remove("disabled");
         minestop.classList.add("disabled");
     }
 }

@@ -39,10 +39,8 @@ class Daemon:
         self.blockchain: Optional[Blockchain] = None
         self.wallet: Optional[Wallet] = None
         self.peer: Optional[Peer] = None
-        self.state = False
         self.mining = False
         self.mining_thread = None
-        self.stake = 0
 
     def ismining(self) -> bool:
         """
@@ -55,32 +53,16 @@ class Daemon:
         """
         return self.mining
 
-    def isrunning(self) -> bool:
-        """
-        Returns if the daemon is running
-
-        Returns
-        -------
-        bool
-            True if the daemon is running, False otherwise
-        """
-        return self.state
-
-    def run(self, function, *args) -> None:
-        if self.isrunning():
-            function(*args)
-        else:
-            self.logger.error("Daemon is not running")
-
     def start(self) -> None:
         """This method is used to run the daemon"""
-        self.logger.info("Daemon started")
-        self.state = True
         self.load()
+        self.peer = Peer(self.blockchain)
+        self.update_blockchain()
+        self.logger.info("Daemon started")
 
     def stop(self) -> None:
         """This method is used to stop the daemon"""
-        self.state = False
+        self.save()
         self.logger.info("Daemon stopped")
 
     def load(self) -> None:
@@ -100,7 +82,6 @@ class Daemon:
             # if it doesn't, create a new blockchain
             self.blockchain = Blockchain.generate()
             self.logger.info("Blockchain was not found or was empty, a new one was generated")
-        self.update_blockchain()
         self.logger.info("Loading wallet")
         # check if the file key.pem exists in data folder
         notfound = True
@@ -241,7 +222,7 @@ class Daemon:
             return False
         if transaction.amount + transaction.fee > self.get_balance(transaction.sender):
             return False
-        if not transaction.verify(transaction.sender):
+        if not transaction.verify():
             return False
         return True
 
@@ -281,10 +262,7 @@ class Daemon:
                     transactions.append(tsx)
         return transactions
 
-    def start_mining(self, stake: int, js_logger: callable, enbl_btn: callable):
-        if stake < 1:
-            js_logger("Stake must be greater than 0")
-            return
+    def start_mining(self, js_logger: callable, enbl_btn: callable):
         js_logger("Starting mining")
         self.mining = True
         enbl_btn(True)
@@ -317,8 +295,10 @@ class Daemon:
         int
             The mining difficulty
         """
-        if self.blockchain.height % 10 == 0:
+        if self.blockchain.height % 10 == 0 or self.blockchain.height == 0:
             return round(len(self.peer.peers) / 100) if len(self.peer.peers) > 100 else 1
+        else:
+            return self.blockchain.last_block.header.difficulty
 
     def update_blockchain(self) -> None:
         self.peer.get_longest_chain(self.blockchain.get_chaininfo())

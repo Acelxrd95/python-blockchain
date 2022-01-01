@@ -76,7 +76,7 @@ class Blockchain:
         Block
             The last block in the blockchain
         """
-        return self.chain[-1]
+        return self.chain[str(self.height)]
 
     @property
     def block_reached(self) -> bool:
@@ -88,7 +88,7 @@ class Blockchain:
         bool
             True if the block target size has been reached, False otherwise
         """
-        if len(self.ether) >= 16:
+        if len(self.ether) >= 1:
             return True
         return False
 
@@ -120,10 +120,10 @@ class Blockchain:
         block : Block
             The block to add to the blockchain
         """
-        self.chain.update({self.height + 1: block})
+        self.chain.update({str(self.height + 1): block})
 
     def get_chaininfo(self) -> tuple[int, str]:
-        return self.height, self.last_block["hash"]
+        return self.height, self.last_block.hash
 
     def genesis(self) -> bool:
         """

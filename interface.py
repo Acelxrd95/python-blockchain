@@ -31,9 +31,9 @@ def send_crypto(recipient, amount, fee=0):
 
 
 @eel.expose
-def mine(state, stake):
+def mine(state):
     if state:
-        daemon.start_mining(stake, eel.logger, eel.enable_mining_button)
+        daemon.start_mining(eel.logger, eel.enable_mining_button)
     else:
         daemon.stop_mining(eel.logger, eel.enable_mining_button)
 

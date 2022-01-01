@@ -1,0 +1,80 @@
+body {
+    min-height: 100vh;
+}
+
+html {
+}
+
+main {
+    display: flex;
+    flex-wrap: nowrap;
+    height: 100vh;
+    max-height: 100vh;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.bi {
+    vertical-align: -.125em;
+    pointer-events: none;
+    fill: currentColor;
+}
+
+.nav-flush .nav-link {
+    border-radius: 0;
+}
+
+.nav-link:hover {
+    color: rgba(0, 0, 0, .85);
+    background-color: rgba(13, 110, 253, 0.35);
+}
+
+.nav-link.active:hover {
+    background-color: rgb(0, 83, 217)
+}
+
+
+div.active {
+    display: flex;
+    flex-direction: column;
+    width: 75%;
+    margin: 0 auto;
+}
+
+div.inactive {
+    display: none;
+}
+
+tr > td:nth-of-type(2) {
+    word-wrap: break-word;
+    min-width: 160px;
+    max-width: 160px;
+}
+
+tr > td:nth-of-type(3) {
+    word-wrap: break-word;
+    min-width: 160px;
+    max-width: 160px;
+}
+
+a {
+    cursor: pointer;
+}
+
+#logarea {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin: 0 auto 25px;
+    border-radius: 5px;
+    border: 2px #c2c2c2 solid;
+    background-color: #fafafa;
+    padding: 10px;
+    overflow-y: auto;
+    height: calc(100vh - 100px);
+
+}
+
+.table-div {
+    overflow-y: auto;
+}

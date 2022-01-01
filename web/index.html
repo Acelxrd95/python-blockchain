@@ -3,598 +3,203 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="./styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link href="./style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-<script src="https://cdn.tailwindcss.com"></script>
-<script src="./eel.js"></script>
-<script>
-    eel.expose(conslog)
-
-    function conslog(msg) {
-        console.log(msg)
-        // document.write(msg)
-    }
-
-    var sideBar = document.getElementById("mobile-nav");
-    var openSidebar = document.getElementById("openSideBar");
-    var closeSidebar = document.getElementById("closeSideBar");
-    sideBar.style.transform = "translateX(-260px)";
-
-    function sidebarHandler(flag) {
-        if (flag) {
-            sideBar.style.transform = "translateX(0px)";
-            openSidebar.classList.add("hidden");
-            closeSidebar.classList.remove("hidden");
-        } else {
-            sideBar.style.transform = "translateX(-260px)";
-            closeSidebar.classList.add("hidden");
-            openSidebar.classList.remove("hidden");
-        }
-    }
-</script>
-
-<div class="flex flex-no-wrap bg-gray-200">
-    <!-- Sidebar starts -->
-    <!-- Remove class [ hidden ] and replace [ sm:flex ] with [ flex ] -->
-    <div
-         class="w-64 absolute sm:relative bg-gray-800 shadow h-full flex-col justify-between flex">
-        <div class="px-8">
-            <div class="h-16 w-full flex items-center">
-                <img src="https://tuk-cdn.s3.amazonaws.com/can-uploader/light_with_icons_at_bottom-svg1.svg" alt="Logo">
+<main>
+    <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 200px">
+        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor"
+                 class="bi me-2 bi-currency-bitcoin" viewBox="0 0 16 16">
+                <path d="M5.5 13v1.25c0 .138.112.25.25.25h1a.25.25 0 0 0 .25-.25V13h.5v1.25c0 .138.112.25.25.25h1a.25.25 0 0 0 .25-.25V13h.084c1.992 0 3.416-1.033 3.416-2.82 0-1.502-1.007-2.323-2.186-2.44v-.088c.97-.242 1.683-.974 1.683-2.19C11.997 3.93 10.847 3 9.092 3H9V1.75a.25.25 0 0 0-.25-.25h-1a.25.25 0 0 0-.25.25V3h-.573V1.75a.25.25 0 0 0-.25-.25H5.75a.25.25 0 0 0-.25.25V3l-1.998.011a.25.25 0 0 0-.25.25v.989c0 .137.11.25.248.25l.755-.005a.75.75 0 0 1 .745.75v5.505a.75.75 0 0 1-.75.75l-.748.011a.25.25 0 0 0-.25.25v1c0 .138.112.25.25.25L5.5 13zm1.427-8.513h1.719c.906 0 1.438.498 1.438 1.312 0 .871-.575 1.362-1.877 1.362h-1.28V4.487zm0 4.051h1.84c1.137 0 1.756.58 1.756 1.524 0 .953-.626 1.45-2.158 1.45H6.927V8.539z"/>
+            </svg>
+            <span class="fs-4">Yeetcoin</span>
+        </a>
+        <hr>
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item">
+                <a onclick="displaydiv('dashboard',this)" class="nav-link active" aria-current="page">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi me-2 bi-house-fill" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                              d="m8 3.293 6 6V13.5a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 13.5V9.293l6-6zm5-.793V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z"/>
+                        <path fill-rule="evenodd"
+                              d="M7.293 1.5a1 1 0 0 1 1.414 0l6.647 6.646a.5.5 0 0 1-.708.708L8 2.207 1.354 8.854a.5.5 0 1 1-.708-.708L7.293 1.5z"/>
+                    </svg>
+                    Dashboard
+                </a>
+            </li>
+            <li>
+                <a onclick="displaydiv('wallet',this)" class="nav-link text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi me-2 bi-cash" viewBox="0 0 16 16">
+                        <path d="M8 10a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
+                        <path d="M0 4a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H1a1 1 0 0 1-1-1V4zm3 0a2 2 0 0 1-2 2v4a2 2 0 0 1 2 2h10a2 2 0 0 1 2-2V6a2 2 0 0 1-2-2H3z"/>
+                    </svg>
+                    Wallet
+                </a>
+            </li>
+            <li>
+                <a onclick="displaydiv('chain',this)" class="nav-link text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi me-2 bi-link" viewBox="0 0 16 16">
+                        <path d="M6.354 5.5H4a3 3 0 0 0 0 6h3a3 3 0 0 0 2.83-4H9c-.086 0-.17.01-.25.031A2 2 0 0 1 7 10.5H4a2 2 0 1 1 0-4h1.535c.218-.376.495-.714.82-1z"/>
+                        <path d="M9 5.5a3 3 0 0 0-2.83 4h1.098A2 2 0 0 1 9 6.5h3a2 2 0 1 1 0 4h-1.535a4.02 4.02 0 0 1-.82 1H12a3 3 0 1 0 0-6H9z"/>
+                    </svg>
+                    View chain
+                </a>
+            </li>
+            <li>
+                <a onclick="displaydiv('mine',this)" class="nav-link text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi me-2 bi-minecart-loaded" viewBox="0 0 16 16">
+                        <path d="M4 15a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm0 1a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm8-1a1 1 0 1 1 0-2 1 1 0 0 1 0 2zm0 1a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM.115 3.18A.5.5 0 0 1 .5 3h15a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 14 12H2a.5.5 0 0 1-.491-.408l-1.5-8a.5.5 0 0 1 .106-.411zm.987.82 1.313 7h11.17l1.313-7H1.102z"/>
+                        <path fill-rule="evenodd"
+                              d="M6 1a2.498 2.498 0 0 1 4 0c.818 0 1.545.394 2 1 .67 0 1.552.57 2 1h-2c-.314 0-.611-.15-.8-.4-.274-.365-.71-.6-1.2-.6-.314 0-.611-.15-.8-.4a1.497 1.497 0 0 0-2.4 0c-.189.25-.486.4-.8.4-.507 0-.955.251-1.228.638-.09.13-.194.25-.308.362H3c.13-.147.401-.432.562-.545a1.63 1.63 0 0 0 .393-.393A2.498 2.498 0 0 1 6 1z"/>
+                    </svg>
+                    Mine
+                </a>
+            </li>
+            <li>
+                <a onclick="displaydiv('settings',this)" class="nav-link text-white">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi me-2 bi-gear-fill" viewBox="0 0 16 16">
+                        <path d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
+                    </svg>
+                    Settings
+                </a>
+            </li>
+        </ul>
+    </div>
+    <div id="dashboard" class="inactive">
+        dashboard
+    </div>
+    <div id="wallet" class="inactive">
+        wallet
+        <p>Balance: YTC <span id="balance">0</span>
+            <button type="button" onclick="update_balance()" class="btn btn-outline-primary btn-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                     class="bi bi-arrow-repeat" viewBox="0 0 16 16">
+                    <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"/>
+                    <path fill-rule="evenodd"
+                          d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"/>
+                </svg>
+            </button>
+        </p>
+        <hr>
+        <h3>Sent YTC</h3>
+        <form>
+            <div class="mb-3 mt-3">
+                <label for="address" class="form-label">Receiver's Address:</label>
+                <input type="text" class="form-control" id="address" placeholder="Enter receiver's address"
+                       name="address">
             </div>
-            <ul class="mt-12">
-                <li class="flex w-full justify-between text-gray-300 cursor-pointer items-center mb-6">
-                    <a href="javascript:void(0)"
-                       class="flex items-center focus:outline-none focus:ring-2 focus:ring-white">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-grid" width="18"
-                             height="18" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none"
-                             stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z"></path>
-                            <rect x="4" y="4" width="6" height="6" rx="1"></rect>
-                            <rect x="14" y="4" width="6" height="6" rx="1"></rect>
-                            <rect x="4" y="14" width="6" height="6" rx="1"></rect>
-                            <rect x="14" y="14" width="6" height="6" rx="1"></rect>
-                        </svg>
-                        <span class="text-sm ml-2">Dashboard</span>
-                    </a>
-                </li>
-                <li class="flex w-full justify-between text-gray-400 hover:text-gray-300 cursor-pointer items-center mb-6">
-                    <a href="javascript:void(0)"
-                       class="flex items-center focus:outline-none focus:ring-2 focus:ring-white">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-puzzle" width="18"
-                             height="18" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none"
-                             stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z"></path>
-                            <path d="M4 7h3a1 1 0 0 0 1 -1v-1a2 2 0 0 1 4 0v1a1 1 0 0 0 1 1h3a1 1 0 0 1 1 1v3a1 1 0 0 0 1 1h1a2 2 0 0 1 0 4h-1a1 1 0 0 0 -1 1v3a1 1 0 0 1 -1 1h-3a1 1 0 0 1 -1 -1v-1a2 2 0 0 0 -4 0v1a1 1 0 0 1 -1 1h-3a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1h1a2 2 0 0 0 0 -4h-1a1 1 0 0 1 -1 -1v-3a1 1 0 0 1 1 -1"></path>
-                        </svg>
-                        <span class="text-sm ml-2">Wallet</span>
-                    </a>
-                    <div class="py-1 px-3 bg-gray-600 rounded text-gray-300 flex items-center justify-center text-xs">
-                        8
-                    </div>
-                </li>
-                <li class="flex w-full justify-between text-gray-400 hover:text-gray-300 cursor-pointer items-center mb-6">
-                    <a href="javascript:void(0)"
-                       class="flex items-center focus:outline-none focus:ring-2 focus:ring-white">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-compass" width="18"
-                             height="18" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none"
-                             stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z"></path>
-                            <polyline points="8 16 10 10 16 8 14 14 8 16"></polyline>
-                            <circle cx="12" cy="12" r="9"></circle>
-                        </svg>
-                        <span class="text-sm ml-2">Send</span>
-                    </a>
-                </li>
-                <li class="flex w-full justify-between text-gray-400 hover:text-gray-300 cursor-pointer items-center mb-6">
-                    <a href="javascript:void(0)"
-                       class="flex items-center focus:outline-none focus:ring-2 focus:ring-white">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-code" width="20"
-                             height="20" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none"
-                             stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z"></path>
-                            <polyline points="7 8 3 12 7 16"></polyline>
-                            <polyline points="17 8 21 12 17 16"></polyline>
-                            <line x1="14" y1="4" x2="10" y2="20"></line>
-                        </svg>
-                        <span class="text-sm ml-2">Receive</span>
-                    </a>
-                </li>
-                <li class="flex w-full justify-between text-gray-400 hover:text-gray-300 cursor-pointer items-center mb-6">
-                    <a href="javascript:void(0)"
-                       class="flex items-center focus:outline-none focus:ring-2 focus:ring-white">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-stack" width="18"
-                             height="18" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none"
-                             stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z"/>
-                            <polyline points="12 4 4 8 12 12 20 8 12 4"/>
-                            <polyline points="4 12 12 16 20 12"/>
-                            <polyline points="4 16 12 20 20 16"/>
-                        </svg>
-                        <span class="text-sm ml-2">Transactions</span>
-                    </a>
-                </li>
-                <li class="flex w-full justify-between text-gray-400 hover:text-gray-300 cursor-pointer items-center">
-                    <a href="javascript:void(0)"
-                       class="flex items-center focus:outline-none focus:ring-2 focus:ring-white">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-settings" width="18"
-                             height="18" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none"
-                             stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z"/>
-                            <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
-                            <circle cx="12" cy="12" r="3"/>
-                        </svg>
-                        <span class="text-sm ml-2">Settings</span>
-                    </a>
-                </li>
-            </ul>
-            <div class="flex justify-center mt-48 mb-4 w-full">
-                <div class="relative">
-                    <div class="text-gray-300 absolute ml-4 inset-0 m-auto w-4 h-4">
-                        <img src="https://tuk-cdn.s3.amazonaws.com/can-uploader/light_with_icons_at_bottom-svg2.svg"
-                             alt="Search">
-                    </div>
-                    <input class="bg-gray-700 focus:outline-none focus:ring-1 focus:ring-gray-100 rounded w-full text-sm text-gray-300 placeholder-gray-400 bg-gray-100 pl-10 py-2"
-                           type="text" placeholder="Search"/>
-                </div>
+            <div class="mb-3">
+                <label for="amount" class="form-label">Amount:</label>
+                <input type="number" min="0.00000" max="999" step="0.25" class="form-control" id="amount"
+                       placeholder="Enter ammount" name="amount">
             </div>
+            <button type="button" onclick="send_crypto()" class="btn btn-primary">Send</button>
+        </form>
+        <hr>
+        <button class="btn btn-primary" onclick="update_history()">
+            Refresh Transaction History
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                 class="bi bi-arrow-repeat" viewBox="0 0 16 16">
+                <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"/>
+                <path fill-rule="evenodd"
+                      d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"/>
+            </svg>
+        </button>
+        <br>
+        <div class="table-div">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Amount</th>
+                    <th>Fee</th>
+                </tr>
+                </thead>
+                <tbody id="history-wallet">
+                <tr>
+                    <td>undefined</td>
+                    <td>0</td>
+                    <td>
+                        612cc49836a4c01ca1f3fbe71972fac29c79e654ac60a48c132d0c5f69cd84cc6997a7e8d4d1173462fb2a6372ea7150
+                    </td>
+                    <td>1000</td>
+                    <td>0</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
-        <div class="px-8 border-t border-gray-700">
-            <ul class="w-full flex items-center justify-between bg-gray-800">
-                <li class="cursor-pointer text-white pt-5 pb-3">
-                    <button aria-label="show notifications"
-                            class="focus:outline-none focus:ring-2 rounded focus:ring-gray-300">
-                        <img src="https://tuk-cdn.s3.amazonaws.com/can-uploader/light_with_icons_at_bottom-svg3.svg"
-                             alt="notifications">
-                    </button>
-                </li>
-                <li class="cursor-pointer text-white pt-5 pb-3">
-                    <button aria-label="open chats" class="focus:outline-none focus:ring-2 rounded focus:ring-gray-300">
-                        <img src="https://tuk-cdn.s3.amazonaws.com/can-uploader/light_with_icons_at_bottom-svg4.svg"
-                             alt="chat">
-                    </button>
-                </li>
-                <li class="cursor-pointer text-white pt-5 pb-3">
-                    <button aria-label="open settings"
-                            class="focus:outline-none focus:ring-2 rounded focus:ring-gray-300">
-                        <img src="https://tuk-cdn.s3.amazonaws.com/can-uploader/light_with_icons_at_bottom-svg5.svg"
-                             alt="settings">
-                    </button>
-                </li>
-                <li class="cursor-pointer text-white pt-5 pb-3">
-                    <button aria-label="open logs" class="focus:outline-none focus:ring-2 rounded focus:ring-gray-300">
-                        <img src="https://tuk-cdn.s3.amazonaws.com/can-uploader/light_with_icons_at_bottom-svg6.svg"
-                             alt="drawer">
-                    </button>
-                </li>
-            </ul>
-        </div>
-            </div>
-    <!-- Sidebar ends -->
-    <!-- Remove class [ h-64 ] when adding a card block -->
-    <div class="container mx-auto py-10 md:w-4/5 w-11/12 px-6">
-        <!-- Remove class [ border-dashed border-2 border-gray-300 ] to remove dotted border -->
-        <div class="w-full h-full rounded border-dashed border-2 border-gray-300">
-            <div class="text-xl m-2">Overview</div>
-            <!--            <div class="bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">-->
-            <!--                <div class="flex items-center">-->
-            <!--                    <div class="flex-shrink-0">-->
-            <!--                        <span class="text-2xl sm:text-3xl leading-none font-bold text-gray-900">2,340</span>-->
-            <!--                        <h3 class="text-base font-normal text-gray-500">New products this week</h3>-->
-            <!--                    </div>-->
-            <!--                    <div class="ml-5 w-0 flex items-center justify-end flex-1 text-green-500 text-base font-bold">-->
-            <!--                        14.6%-->
-            <!--                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"-->
-            <!--                             xmlns="http://www.w3.org/2000/svg"-->
-            <!--                             data-darkreader-inline-fill="">-->
-            <!--                            <path fill-rule="evenodd"-->
-            <!--                                  d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z"-->
-            <!--                                  clip-rule="evenodd"></path>-->
-            <!--                        </svg>-->
-            <!--                    </div>-->
-            <!--                </div>-->
-            <!--            </div>-->
-            <div class="flex flex-row w-full">
-                <div class="dashboard-card mr-auto text-center bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
-                    <div class="font-semibold text-base ml-2 text-gray-400">Balance:</div>
-                    <div class="font-bold text-lg">YTC 10.00000000</div>
-                </div>
-                <div class="dashboard-card m-auto text-center bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
-                    <div class="font-semibold text-base ml-2 text-gray-400">Pending:</div>
-                    <div class="font-bold text-lg">YTC 10.00000000</div>
-                </div>
-                <div class="dashboard-card ml-auto text-center bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8 ">
-                    <div class="font-semibold text-base ml-2 text-gray-400">Pending:</div>
-                    <div class="font-bold text-lg">YTC 10.00000000</div>
-                </div>
-            </div>
-<!--            <div class="recent-transactions h-1/2 mt-5 text-center bg-white shadow rounded-lg p-4 sm:p-6 xl:p-8">-->
-            <!-- This example requires Tailwind CSS v2.0+ -->
-            <div class="flex flex-col mt-5">
-                <div class=" -my-2  sm:-mx-6 lg:-mx-8">
-                    <div class="pt-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                        <div class="max-h-96 shadow overflow-y-scroll border-b border-gray-200 sm:rounded-lg">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                <tr>
-                                    <th scope="col"
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Name
-                                    </th>
-                                    <th scope="col"
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Title
-                                    </th>
-                                    <th scope="col"
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Status
-                                    </th>
-                                    <th scope="col"
-                                        class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                        Role
-                                    </th>
-                                    <th scope="col" class="relative px-6 py-3">
-                                        <span class="sr-only">Edit</span>
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div class="flex-shrink-0 h-10 w-10">
-                                                <img class="h-10 w-10 rounded-full"
-                                                     src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60"
-                                                     alt="">
-                                            </div>
-                                            <div class="ml-4">
-                                                <div class="text-sm font-medium text-gray-900">
-                                                    Jane Cooper
-                                                </div>
-                                                <div class="text-sm text-gray-500">
-                                                    jane.cooper@example.com
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">Regional Paradigm Technician</div>
-                                        <div class="text-sm text-gray-500">Optimization</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                            Active
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        Admin
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div class="flex-shrink-0 h-10 w-10">
-                                                <img class="h-10 w-10 rounded-full"
-                                                     src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60"
-                                                     alt="">
-                                            </div>
-                                            <div class="ml-4">
-                                                <div class="text-sm font-medium text-gray-900">
-                                                    Jane Cooper
-                                                </div>
-                                                <div class="text-sm text-gray-500">
-                                                    jane.cooper@example.com
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">Regional Paradigm Technician</div>
-                                        <div class="text-sm text-gray-500">Optimization</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                            Active
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        Admin
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div class="flex-shrink-0 h-10 w-10">
-                                                <img class="h-10 w-10 rounded-full"
-                                                     src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60"
-                                                     alt="">
-                                            </div>
-                                            <div class="ml-4">
-                                                <div class="text-sm font-medium text-gray-900">
-                                                    Jane Cooper
-                                                </div>
-                                                <div class="text-sm text-gray-500">
-                                                    jane.cooper@example.com
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">Regional Paradigm Technician</div>
-                                        <div class="text-sm text-gray-500">Optimization</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                            Active
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        Admin
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div class="flex-shrink-0 h-10 w-10">
-                                                <img class="h-10 w-10 rounded-full"
-                                                     src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60"
-                                                     alt="">
-                                            </div>
-                                            <div class="ml-4">
-                                                <div class="text-sm font-medium text-gray-900">
-                                                    Jane Cooper
-                                                </div>
-                                                <div class="text-sm text-gray-500">
-                                                    jane.cooper@example.com
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">Regional Paradigm Technician</div>
-                                        <div class="text-sm text-gray-500">Optimization</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                            Active
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        Admin
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div class="flex-shrink-0 h-10 w-10">
-                                                <img class="h-10 w-10 rounded-full"
-                                                     src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60"
-                                                     alt="">
-                                            </div>
-                                            <div class="ml-4">
-                                                <div class="text-sm font-medium text-gray-900">
-                                                    Jane Cooper
-                                                </div>
-                                                <div class="text-sm text-gray-500">
-                                                    jane.cooper@example.com
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">Regional Paradigm Technician</div>
-                                        <div class="text-sm text-gray-500">Optimization</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                            Active
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        Admin
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div class="flex-shrink-0 h-10 w-10">
-                                                <img class="h-10 w-10 rounded-full"
-                                                     src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60"
-                                                     alt="">
-                                            </div>
-                                            <div class="ml-4">
-                                                <div class="text-sm font-medium text-gray-900">
-                                                    Jane Cooper
-                                                </div>
-                                                <div class="text-sm text-gray-500">
-                                                    jane.cooper@example.com
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">Regional Paradigm Technician</div>
-                                        <div class="text-sm text-gray-500">Optimization</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                            Active
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        Admin
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div class="flex-shrink-0 h-10 w-10">
-                                                <img class="h-10 w-10 rounded-full"
-                                                     src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60"
-                                                     alt="">
-                                            </div>
-                                            <div class="ml-4">
-                                                <div class="text-sm font-medium text-gray-900">
-                                                    Jane Cooper
-                                                </div>
-                                                <div class="text-sm text-gray-500">
-                                                    jane.cooper@example.com
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">Regional Paradigm Technician</div>
-                                        <div class="text-sm text-gray-500">Optimization</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                            Active
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        Admin
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div class="flex-shrink-0 h-10 w-10">
-                                                <img class="h-10 w-10 rounded-full"
-                                                     src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60"
-                                                     alt="">
-                                            </div>
-                                            <div class="ml-4">
-                                                <div class="text-sm font-medium text-gray-900">
-                                                    Jane Cooper
-                                                </div>
-                                                <div class="text-sm text-gray-500">
-                                                    jane.cooper@example.com
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">Regional Paradigm Technician</div>
-                                        <div class="text-sm text-gray-500">Optimization</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                            Active
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        Admin
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div class="flex-shrink-0 h-10 w-10">
-                                                <img class="h-10 w-10 rounded-full"
-                                                     src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60"
-                                                     alt="">
-                                            </div>
-                                            <div class="ml-4">
-                                                <div class="text-sm font-medium text-gray-900">
-                                                    Jane Cooper
-                                                </div>
-                                                <div class="text-sm text-gray-500">
-                                                    jane.cooper@example.com
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">Regional Paradigm Technician</div>
-                                        <div class="text-sm text-gray-500">Optimization</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                            Active
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        Admin
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="flex items-center">
-                                            <div class="flex-shrink-0 h-10 w-10">
-                                                <img class="h-10 w-10 rounded-full"
-                                                     src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=60"
-                                                     alt="">
-                                            </div>
-                                            <div class="ml-4">
-                                                <div class="text-sm font-medium text-gray-900">
-                                                    Jane Cooper
-                                                </div>
-                                                <div class="text-sm text-gray-500">
-                                                    jane.cooper@example.com
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm text-gray-900">Regional Paradigm Technician</div>
-                                        <div class="text-sm text-gray-500">Optimization</div>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                                            Active
-                                        </span>
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        Admin
-                                    </td>
-                                    <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                        <a href="#" class="text-indigo-600 hover:text-indigo-900">Edit</a>
-                                    </td>
-                                </tr>
 
-                                <!-- More people... -->
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-            <!-- Place your content here -->
+    </div>
+    <div id="chain" class="inactive">
+        chain
+        <button class="btn btn-primary" onclick="refresh_chain()">
+            Refresh Chain
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                 class="bi bi-arrow-repeat" viewBox="0 0 16 16">
+                <path d="M11.534 7h3.932a.25.25 0 0 1 .192.41l-1.966 2.36a.25.25 0 0 1-.384 0l-1.966-2.36a.25.25 0 0 1 .192-.41zm-11 2h3.932a.25.25 0 0 0 .192-.41L2.692 6.23a.25.25 0 0 0-.384 0L.342 8.59A.25.25 0 0 0 .534 9z"/>
+                <path fill-rule="evenodd"
+                      d="M8 3c-1.552 0-2.94.707-3.857 1.818a.5.5 0 1 1-.771-.636A6.002 6.002 0 0 1 13.917 7H12.9A5.002 5.002 0 0 0 8 3zM3.1 9a5.002 5.002 0 0 0 8.757 2.182.5.5 0 1 1 .771.636A6.002 6.002 0 0 1 2.083 9H3.1z"/>
+            </svg>
+        </button>
+        <br>
+        <div class="table-div">
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Amount</th>
+                    <th>Fee</th>
+                </tr>
+                </thead>
+                <tbody id="chain-table">
+                <tr>
+                    <td>undefined</td>
+                    <td>0</td>
+                    <td>
+                        612cc49836a4c01ca1f3fbe71972fac29c79e654ac60a48c132d0c5f69cd84cc6997a7e8d4d1173462fb2a6372ea7150
+                    </td>
+                    <td>1000</td>
+                    <td>0</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
+    <div id="mine" class="active">
+        <br>
+        <label for="stake" class="form-label">Stake Amount:</label>
+        <input type="number" id="stake" name="stake" min="1" max="10" class="form-control" placeholder="Please enter your stake amount">
+        <br>
+        <div style="display:flex; justify-content:space-between;">
+            <button id="start_mining" onclick="minefunc(true)" style="width:45%" class="btn btn-success btn-lg active">
+                Start
+            </button>
+            <button id="stop_mining" onclick="minefunc(false)" style="width:45%" class="btn btn-danger btn-lg disabled">
+                Stop
+            </button>
+        </div>
+        <hr>
+        <h2>Logs</h2>
+        <div id="logarea">
+        </div>
     </div>
-
-
-
+    <div id="settings" class="inactive">
+        settings
+    </div>
+</main>
 </body>
+<script src="./eel.js"></script>
+<script src="./index.js"></script>
 </html>

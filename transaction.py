@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from datetime import datetime
 from json import dumps
+import inspect
 
 from ecdsa import SigningKey
 
@@ -28,18 +29,40 @@ class Transaction:
         Signature of the transaction
     """
 
-    sender: str = None
-    recipient: str = None
     amount: float = None
-    timestamp: datetime = None
-    fee: int = None
-    signature: str = None
     data: dict = None
+    fee: int = None
+    recipient: str = None
+    sender: str = None
+    signature: str = None
+    timestamp: datetime = None
 
     @property
     def size(self):
         """returns the size of the transaction in bytes"""
         return len(dumps(self.data))
+
+    @classmethod
+    def from_json(cls, json_data: dict):
+        """
+        creates a transaction from a json string
+
+        Parameters
+        ----------
+        json_data : dict
+            the json string to create the transaction from
+
+        Returns
+        -------
+        Transaction
+            the transaction created from the json string
+        """
+        return cls(
+            **{
+                key: (json_data[key] if val.default == val.empty else json_data.get(key, val.default))
+                for key, val in inspect.signature(Transaction).parameters.items()
+            }
+        )
 
     def sign(self, private_key: SigningKey):
         """

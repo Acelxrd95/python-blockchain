@@ -3,7 +3,7 @@ from datetime import datetime
 from json import dumps
 import inspect
 
-from ecdsa import SigningKey
+from ecdsa import SigningKey, VerifyingKey
 
 
 @dataclass
@@ -64,6 +64,44 @@ class Transaction:
             }
         )
 
+    def to_dict(self, include_signature: bool = False) -> dict:
+        """
+        returns the transaction as a dict
+
+        Parameters
+        ----------
+        include_signature : bool
+            whether to include the signature in the dict
+
+        Returns
+        -------
+        dict
+            the transaction as a dict
+        """
+        data = {
+            key: (val if val.default == val.empty else getattr(self, key))
+            for key, val in inspect.signature(Transaction).parameters.items()
+        }
+        if include_signature:
+            data["signature"] = self.signature
+        return data
+
+    def to_json(self, include_signature: bool = False) -> str:
+        """
+        returns the transaction as a json string
+
+        Parameters
+        ----------
+        include_signature : bool
+            whether to include the signature in the json string
+
+        Returns
+        -------
+        str
+            the transaction as a json string
+        """
+        return dumps(self.to_dict(include_signature))
+
     def sign(self, private_key: SigningKey):
         """
         signs the transaction with the given private key
@@ -73,4 +111,15 @@ class Transaction:
         private_key :
             the private key to sign the transaction with
         """
-        self.signature = private_key.sign(self.data)
+        self.signature = private_key.sign(self.to_json())
+
+    def verify(self, public_key: str):
+        """
+        verifies the transaction with the given public key
+
+        Parameters
+        ----------
+        public_key : str
+            the public key to verify the transaction with
+        """
+        return VerifyingKey.from_string(public_key).verify(self.signature, self.to_json())

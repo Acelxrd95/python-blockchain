@@ -1,7 +1,7 @@
 import socket
 from logging import getLogger, StreamHandler, Formatter, INFO
 from json import loads, dumps
-from peer import Peer
+from peer import Peer, Protocol, preset_protocols
 
 check_alive = Peer.check_alive
 
@@ -37,11 +37,14 @@ while True:
             # remove client from dictionary
             clients.pop(clients.index(client))
     # send alive clients to client
-    conn.send(dumps(clients).encode())
+    prot = preset_protocols["get-peers"]
+    prot.data = clients
+    conn.send(bytes(prot))
     try:
         client = conn.recv(1024)
         if client:
-            clients.append(loads(client.decode()))
+            data = Protocol.from_bytes(client)
+            clients.append(data.data)
     except socket.timeout:
         logger.info(f"Client {str(addr)} timed out")
     else:

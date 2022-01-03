@@ -7,21 +7,36 @@ from typing import Any
 
 @dataclass
 class Protocol:
+    """
+    The dataclass for protocol messages.
+
+    Attributes
+    ----------
+    type : str
+        The type of the message.
+    data : Any
+        The data of the message.
+    """
+
     type: str
     data: Any
 
-    def __str__(self):
+    def __str__(self) -> str:
+        """Returns the string representation of the protocol message."""
         return dumps(self.__dict__)
 
-    def __bytes__(self):
+    def __bytes__(self) -> str:
+        """Returns the bytes representation of the protocol message."""
         return dumps(self.__dict__).encode()
 
     @staticmethod
-    def from_str(s):
+    def from_str(s) -> "Protocol":
+        """Creates the protocol message from the string."""
         return Protocol(**loads(s))
 
     @staticmethod
-    def from_bytes(b):
+    def from_bytes(b) -> "Protocol":
+        """Creates the protocol message from the bytes."""
         return Protocol.from_str(b.decode())
 
 
@@ -38,6 +53,29 @@ preset_protocols = {
 
 
 class Peer:
+    """
+    The class for the peer node.
+
+    Attributes
+    ----------
+    host : str
+        The host address of the peer node.
+    port : int
+        The port number of the peer node.
+    buffer_size : int
+        The buffer size of the peer node.
+    thread_executor : ThreadPoolExecutor
+        The thread executor for the peer node.
+    peers : list[tuple[str, int]]
+        The list of peers of the peer node.
+    tracker_addr : tuple[str, int]
+        The address of the tracker node.
+    node : socket.socket
+        The socket of the peer node.
+    blockchain : Blockchain
+        The blockchain of the peer node.
+    """
+
     def __init__(self, blockchain, port: int = 5000, buffer_size: int = 1024) -> None:
         self.host: str = socket.gethostbyname(socket.gethostname())
         self.port: int = port
@@ -49,6 +87,7 @@ class Peer:
         self.blockchain = blockchain
 
     def start(self) -> None:
+        """Start the peer node."""
         with self.thread_executor as executor:
             executor.submit(self.get_alive)
             executor.submit(self.listen)
@@ -67,7 +106,24 @@ class Peer:
             data = conn.recv(1024)
             self.process_protocol(conn, addr, data)
 
-    def process_protocol(self, conn, addr, data: bytes) -> Any:
+    def process_protocol(self, conn: socket, addr: tuple[str, int], data: bytes) -> Any:
+        """
+        Process the protocol message.
+
+        Parameters
+        ----------
+        conn : socket
+            The socket of the peer node.
+        addr : tuple[str, int]
+            The address of the peer node.
+        data : bytes
+            The data of the protocol message.
+
+        Returns
+        -------
+        Any
+            The result of the protocol message.
+        """
         prot = Protocol.from_bytes(data)
         if prot.type == "ping":
             conn.send(bytes(preset_protocols["ack"]))
@@ -103,6 +159,11 @@ class Peer:
         ----------
         message : Protocol
             Message to broadcast
+
+        Returns
+        -------
+        Any
+            The result of the broadcast
         """
         data = []
         futures = []
@@ -110,12 +171,31 @@ class Peer:
             for peer in self.peers:
                 if self.check_alive(peer[0], peer[1]):
                     # connect to a peer on a new thread
-                    futures.append(executor.submit(self.sendmsg, peer[0], peer[1], message))
+                    futures.append(
+                        executor.submit(self.sendmsg, peer[0], peer[1], message)
+                    )
         for future in futures:
             data.append(future.result())
         return data
 
     def sendmsg(self, host: str, port: int, message: Protocol) -> Any:
+        """
+        Send a message to a peer
+
+        Parameters
+        ----------
+        host : str
+            The host address of the peer node.
+        port : int
+            The port number of the peer node.
+        message : Protocol
+            Message to send
+
+        Returns
+        -------
+        Any
+            The result of the sendmsg after being processed
+        """
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
             sock.settimeout(30)
             try:
@@ -147,6 +227,7 @@ class Peer:
         # close socket
         sock.close()
         self.peers = loads(data.decode())
+        return True
 
     @staticmethod
     def check_alive(host: str, port: int) -> bool:
@@ -197,5 +278,7 @@ class Peer:
                 if info["height"] > chain_info["height"]:
                     longest_chain = info, address
         if longest_chain:
-            chain = self.sendmsg(longest_chain[1][0], longest_chain[1][1], preset_protocols["chain"])
+            chain = self.sendmsg(
+                longest_chain[1][0], longest_chain[1][1], preset_protocols["chain"]
+            )
             return chain

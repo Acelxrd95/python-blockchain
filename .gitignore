@@ -1,5 +1,5 @@
 
 /archive/
 /old/
-/data/
 /_trial_temp/
+*__pycache__

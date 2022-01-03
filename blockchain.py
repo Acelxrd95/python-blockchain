@@ -5,10 +5,20 @@ from transaction import Transaction
 
 
 class Blockchain:
+    """
+    The main class for the blockchain.
+
+    Attributes
+    ----------
+    chain : dict
+        The chain containing all the valid blocks
+    ether : Queue[Transaction]
+        The list of transactions in the ether
+    """
+
     def __init__(self, chain: dict) -> None:
         self.chain = chain
-        # TODO: change to priority queue
-        self.ether = []
+        self.ether = Queue()
 
     @classmethod
     def from_json(cls, json_data: dict) -> "Blockchain":
@@ -93,6 +103,14 @@ class Blockchain:
         return False
 
     def calc_reward(self) -> float:
+        """
+        Calculate the reward for the last block
+
+        Returns
+        -------
+        float
+            The reward for the last block
+        """
         total_reward = 17179869183
         max_reward = 50
         reward = total_reward / self.height ** 2
@@ -109,7 +127,7 @@ class Blockchain:
         transaction : Transaction
             The transaction to add to the ether
         """
-        self.ether.append(transaction)
+        self.ether.enqueue(transaction)
 
     def add_block(self, block: Block) -> None:
         """
@@ -123,6 +141,14 @@ class Blockchain:
         self.chain.update({str(self.height + 1): block})
 
     def get_chaininfo(self) -> tuple[int, str]:
+        """
+        Get the chain information
+
+        Returns
+        -------
+        tuple[int, str]
+            The chain information
+        """
         return self.height, self.last_block.hash
 
     def genesis(self) -> bool:
@@ -137,11 +163,8 @@ class Blockchain:
         if self.height == 0:
             tsx = Transaction()
             tsx.sender = "0"
-            tsx.recipient = (
-                "612cc49836a4c01ca1f3fbe71972fac29c79e654ac60a48c132d0c5f69cd84cc6997a7e8d4d1173462fb2a6372ea7150"
-            )
+            tsx.recipient = "612cc49836a4c01ca1f3fbe71972fac29c79e654ac60a48c132d0c5f69cd84cc6997a7e8d4d1173462fb2a6372ea7150"
             tsx.amount = 1000
-            tsx.fee = 0
             tsx.nonce = 0
             tsx.timestamp = datetime.now().timestamp()
 

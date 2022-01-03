@@ -98,7 +98,7 @@ class Blockchain:
         bool
             True if the block target size has been reached, False otherwise
         """
-        if len(self.ether) >= 1:
+        if len(self.ether) >= 1:  # DEV: Change to 16 or 32
             return True
         return False
 
